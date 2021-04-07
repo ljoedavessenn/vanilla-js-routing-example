@@ -2,9 +2,10 @@
 let home = '';
 let about = '';
 let contact = '';
+let error = '';
 
 
-let routes;
+let routes = {};
 
 //Get the Element with the Id 'root'
 const rootDiv = document.getElementById('root');
@@ -28,6 +29,16 @@ const loadAllPages = async () => {
     home = await loadPage('./home.html');
     about = await loadPage('./about.html');
     contact = await loadPage('./contact.html');
+    error = await loadPage('./error404.html');
+};
+
+const showPage = pathname =>{
+    const page = routes[pathname];
+    if(page){
+        rootDiv.innerHTML=page;
+    } else{
+        rootDiv.innerHTML = error;
+    }
 };
 
 
@@ -43,7 +54,7 @@ const main = async () => {
         '/contact': contact,
         '/about': about,
     };
-    rootDiv.innerHTML = routes[window.location.pathname];
+    showPage(window.location.pathname);
 };
 
 // Invoke the Main function
@@ -51,7 +62,7 @@ main();
 
 const onNavClick = (pathname) => {
     window.history.pushState({}, pathname, window.location.origin + pathname); 
-    rootDiv.innerHTML = routes[pathname];
+    showPage(pathname);
 };
 
 /**
